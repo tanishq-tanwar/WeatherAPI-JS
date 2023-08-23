@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Temperature</title>
+    <style>
+      * {
+        margin: 0;
+        box-sizing: border-box;
+        font-family: sans-serif;
+      }
+      html {
+        font-size: 16px;
+        color: #fff;
+      }
+      body {
+        background-color: rgb(174, 219, 235);
+      }
+      .container {
+        position: absolute;
+        top: 50%;
+        right: 50%;
+        transform: translate(50%, -50%);
+        max-width: 600px;
+        margin: auto;
+        padding: 0 1rem;
+        text-align: center;
+        height: 80%;
+        background: url(https://img.freepik.com/premium-photo/cloudless-sky-blue-color-day-is-vibrant-clear-summertime-pleasant-weather-lovely-scenery-morning_410516-2242.jpg) center/cover no-repeat;
+        justify-content: center;
+        align-items: center;
+        padding: 50px;
+        border-radius: 10px;
+      }
+      .row {
+        display: flex;
+        padding: 0 -1rem;
+      }
+      .row input {
+        border-radius: 5px;
+        border-color: #fff;
+        margin-right: 10px;
+        padding: 8px;
+      }
+      .row input:focus {
+        border: #fff;
+        outline: #fff;
+      }
+      .row svg {
+        width: 25px;
+        color: #fff;
+      }
+      .row button {
+        background: transparent;
+        border: none;
+        padding-top: 5px;
+      }
+      h2 {
+        color: #fff;
+        font-size: 50px;
+        margin-top: 10px;
+      }
+      .col-4 {
+        flex-basis: 100%;
+        max-width: 240px;
+        font-size: 20px;
+        margin: 20px 0;
+      }
+      .weather {
+        font-size: 40px;
+        font-weight: 600;
+        margin-bottom: 30px;
+      }
+      h3 {
+        font-size: 16px;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.765);
+        display: none;
+      }
+      .sun {
+        display: none;
+      }
+      .sun img{
+        max-width: 200px;
+        width: 30%;
+        margin: auto;
+        margin-top: 30px;
+      }
+      .block {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap-city" for="city">
+      <div class="container">
+        <div class="row">
+          <input id="city" type="text" />
+          <button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+              />
+            </svg>
+          </button>
+        </div>
+        <div class="sun">
+          <img src="cloudy.png" alt="">          
+        </div>        
+        <h2 class="temp"></h2>
+        <div class="weather"></div>
+          <div class="col-4">
+            <div class="pressure"></div>
+            <h3>Air pressure</h3>
+          </div>
+          <div class="col-4">
+            <div class="humidity"></div>
+            <h3>Humidity</h3>
+          </div>
+          <div class="col-4">
+            <div class="speed"></div>
+            <h3>Wind Speed</h3>
+          </div>
+      </div>
+    </div>
+    <script>
+      'use strict';
+      // Get Temperature by City
+      let city = 'rajasthan';
+      document.querySelector('#city').addEventListener('input', (event) => {
+        city = event.target.value;
+      });
+      document.querySelector('button').addEventListener('click', () => {
+        let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=a2a8b28a42707205a1c736e6c5377f6f&units=metric`;
+        fetch(url)
+          .then((i) => i.json())
+          .then(
+            (i) => {
+              document.querySelector('.temp').innerHTML = `${i.main.temp} °C`
+              document.querySelector('.weather').innerHTML = `${i.weather[0].main}`
+              document.querySelector('.pressure').innerHTML = `${i.main.pressure} hpa`
+              document.querySelector('.humidity').innerHTML = `${i.main.humidity}%`
+              document.querySelector('.speed').innerHTML = `${i.wind.speed}m/s`
+            }
+          );
+          setTimeout(function(){document.querySelector('.sun').classList.add('block')}, 250)
+          const allH3 = document.querySelectorAll("h3");
+          allH3.forEach((i => {
+            setTimeout(function(){i.classList.add('block')}, 250);
+          }))
+      });
+      document.querySelector('#city').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          document.querySelector('button').click();
+        }
+      });
+    </script>
+  </body>
+</html>
